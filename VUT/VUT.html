@@ -1,14 +1,18 @@
 <html>
 <head>
-<title>Voto y cálculo de VUT</title>
+<title>Voto y c&aacute;lculo de VUT</title>
 <script type="text/javascript" src="VUT.js"></script>
+<script type="text/javascript" src="VUTHelper.js"></script>
 </head>
 <body>
-	<h1>Vistalegre II</h1>
+	<h1>Voto y c&aacute;lculo de VUT</h1>
 	<div id="candidatures">
 		<input type="text" name="candidate" id="inputCandidate">
-		<button type="button" onclick="addCandidate()">Añadir Candidato</button>
+		<button type="button" id="btnAdd" onclick="addCandidate()">A&ntilde;adir Candidatura</button>
+		<button type="button" id="btnClose" onclick="closeCandidates()">Cerrar Candidaturas</button>
 		<table id="candidates"></table>
+	</div>
+	<div id="votes">
 	</div>
 	<div id="vut">
 		<p id="progress"></p>

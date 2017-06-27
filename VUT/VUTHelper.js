@@ -14,3 +14,13 @@ function addCandidate() {
 	candidates[idCounter] = candidate;
 	idCounter++;
 };
+
+function closeCandidates() {
+	var divCandidatures = document.getElementById("candidatures");
+	var child = document.getElementById("inputCandidate");
+	divCandidatures.removeChild(child);
+	child = document.getElementById("btnClose");
+	divCandidatures.removeChild(child);
+	child = document.getElementById("btnAdd");
+	divCandidatures.removeChild(child);
+};
