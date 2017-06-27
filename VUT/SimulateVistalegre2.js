@@ -1,6 +1,4 @@
 var indexVoter;
-var outputProgress;
-var resultsTable;
 
 
 function start() {

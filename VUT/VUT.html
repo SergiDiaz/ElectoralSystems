@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Voto y cálculo de VUT</title>
+<script type="text/javascript" src="VUT.js"></script>
+</head>
+<body>
+	<h1>Vistalegre II</h1>
+	<div id="candidatures">
+		<input type="text" name="candidate" id="inputCandidate">
+		<button type="button" onclick="addCandidate()">Añadir Candidato</button>
+		<table id="candidates"></table>
+	</div>
+	<div id="vut">
+		<p id="progress"></p>
+		<table id="results"></table>
+	</div>
+<script>
+(function() {
+   // the DOM will be available here
+	onLoad();
+})();
+</script>
+</body>
+</html>

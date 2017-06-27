@@ -1,3 +1,6 @@
+var resultsTable;
+var outputProgress;
+
 var candidates = [];
 var results = {};
 var answersByCandidate;
