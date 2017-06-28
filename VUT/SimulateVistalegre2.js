@@ -4,6 +4,7 @@ var indexVoter;
 function start() {
 	outputProgress = document.getElementById("progress");
 	resultsTable = document.getElementById("results");
+	candidatesToChose = 62;
 	var resultsVistalegre2 = jsonVistalegre2["payload"]["results"]["questions"][4];
 	simulate(resultsVistalegre2);
 };

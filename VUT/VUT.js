@@ -1,5 +1,6 @@
 var resultsTable;
 var outputProgress;
+var candidatesToChose;
 
 var candidates = [];
 var results = {};
@@ -11,6 +12,7 @@ var numCandidatesEliminated;
 var firstDistributionDone = false;
 var candidateElectedLastPass;
 
+
 function onLoad() {
 
 };
@@ -20,7 +22,7 @@ function prepareVUT() {
 		results.voters[i].curIndexVote = 0;
 		results.voters[i].curVoteValue = 1;
 	}
-	droopQuota = Math.floor(results.totalVotes / 63 + 1);
+	droopQuota = Math.floor(results.totalVotes / (candidatesToChose+1) + 1);
 	numCandidatesElected = 0;
 	numCandidatesEliminated = 0;
 	indexCandidate = 0;
@@ -47,7 +49,7 @@ function calculate() {
 	if(indexCandidate < candidates.length) {
 		setTimeout(calculate, 1);
 	}
-	else if(numCandidatesElected < 62) {
+	else if(numCandidatesElected < candidatesToChose) {
 		firstDistributionDone = true;
 		if(candidateElectedLastPass) {
 			setTimeout(transferSurplus, 1);
@@ -137,7 +139,7 @@ function eliminateCandidate() {
 		candidateToEliminate.eliminated = true;
 		candidateToEliminate.votes = 0;
 		numCandidatesEliminated++;
-		if(numCandidatesEliminated >= candidates.length - 62) {
+		if(numCandidatesEliminated >= candidates.length - candidatesToChose) {
 			electNonEliminatedCandidates();
 		}
 		else {
