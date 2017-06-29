@@ -29,6 +29,9 @@ function addCandidate() {
 };
 
 function closeCandidates() {
+	var textInput = document.getElementById("inputNumElected");
+	candidatesToChose = textInput.value;
+	
 	var div = document.getElementById("candidatures");
 	var child = document.getElementById("inputCandidate");
 	div.removeChild(child);
@@ -134,6 +137,5 @@ function endVotesAndCount() {
 	div.parentNode.removeChild(div);
 	outputProgress = document.getElementById("progress");
 	resultsTable = document.getElementById("results");
-	candidatesToChose = 4;
 	prepareVUT();
 };
