@@ -71,6 +71,8 @@ function closeCandidates() {
 
 	results.voters = [];
 	results.totalVotes = 0;
+	results.whites = 0;
+	results.nulls = 0;
 };
 
 function fillSelectToVote() {
@@ -85,6 +87,14 @@ function fillSelectToVote() {
 		child.value = candidates[i].id;
 		selectToVote.appendChild(child);
 	}
+	child = document.createElement("option");
+	child.text = "Voto en blanco";
+	child.value = -1;
+	selectToVote.appendChild(child);
+	child = document.createElement("option");
+	child.text = "Voto nulo";
+	child.value = -2;
+	selectToVote.appendChild(child);
 };
 
 function voteCandidate() {
@@ -95,31 +105,46 @@ function voteCandidate() {
 
 	var option = selectToVote.options[selectedIndex];
 	var indexCandidate = option.value;
-	selectToVote.removeChild(option);
 
-	if(typeof results.voters[curVoterIndex] === "undefined") {
-		results.voters[curVoterIndex] = {};
-		results.voters[curVoterIndex].votes = [];
-		results.totalVotes++;
+	if(indexCandidate == -1) {
+		//White vote
+		results.whites++;
 	}
+	else if(indexCandidate == -2) {
+		//Null vote
+		results.nulls++;
+	}
+	else {
+		selectToVote.removeChild(option);
+		if(typeof results.voters[curVoterIndex] === "undefined") {
+			results.voters[curVoterIndex] = {};
+			results.voters[curVoterIndex].votes = [];
+			results.totalVotes++;
+		}
 
-	var vote = {};
-	vote.category = candidates[indexCandidate].category;
-	vote.id = candidates[indexCandidate].id;
-	vote.text = candidates[indexCandidate].text;
-	vote.indexCandidate = indexCandidate;
-	results.voters[curVoterIndex].votes.push(vote);
+		var lastOption = selectToVote.options[selectToVote.length-1];
+		while(lastOption.value < 0) {
+			selectToVote.removeChild(lastOption);
+			lastOption = selectToVote.options[selectToVote.length-1];
+		}
+		var vote = {};
+		vote.category = candidates[indexCandidate].category;
+		vote.id = candidates[indexCandidate].id;
+		vote.text = candidates[indexCandidate].text;
+		vote.indexCandidate = indexCandidate;
+		results.voters[curVoterIndex].votes.push(vote);
 
-	var row = document.createElement("tr");
-	var column = document.createElement("td");
-	var txt = document.createElement("p");
-	txt.textContent = "" + (results.voters[curVoterIndex].votes.length) + " - " + vote.text;
-	column.appendChild(txt);
-	row.appendChild(column);
-	var table = document.getElementById("votesTable");
-	table.appendChild(row);
+		var row = document.createElement("tr");
+		var column = document.createElement("td");
+		var txt = document.createElement("p");
+		txt.textContent = "" + (results.voters[curVoterIndex].votes.length) + " - " + vote.text;
+		column.appendChild(txt);
+		row.appendChild(column);
+		var table = document.getElementById("votesTable");
+		table.appendChild(row);
 
-	btnToVote.textContent = "Votar en la posici\xF3n " + (results.voters[curVoterIndex].votes.length + 1);
+		btnToVote.textContent = "Votar en la posici\xF3n " + (results.voters[curVoterIndex].votes.length + 1);
+	}
 };
 
 function nextVoter() {

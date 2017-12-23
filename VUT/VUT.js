@@ -59,6 +59,22 @@ function calculate() {
 		}
 	}
 	else {
+		var row = document.createElement("tr");
+		var column = document.createElement("td");
+		var txt = document.createElement("p");
+		txt.textContent = "Votos en blanco: " + results.whites;
+		column.appendChild(txt);
+		row.appendChild(column);
+		resultsTable.appendChild(row);
+
+		row = document.createElement("tr");
+		column = document.createElement("td");
+		txt = document.createElement("p");
+		txt.textContent = "Votos nulos: " + results.nulls;
+		column.appendChild(txt);
+		row.appendChild(column);
+		resultsTable.appendChild(row);
+
 		outputProgress.textContent = "Done!";
 	}
 };
@@ -157,6 +173,22 @@ function electNonEliminatedCandidates() {
 			electCandidate(candidate);
 		}
 	}
+
+	var row = document.createElement("tr");
+	var column = document.createElement("td");
+	var txt = document.createElement("p");
+	txt.textContent = "Votos en blanco: " + results.whites;
+	column.appendChild(txt);
+	row.appendChild(column);
+	resultsTable.appendChild(row);
+
+	row = document.createElement("tr");
+	column = document.createElement("td");
+	txt = document.createElement("p");
+	txt.textContent = "Votos nulos: " + results.nulls;
+	column.appendChild(txt);
+	row.appendChild(column);
+	resultsTable.appendChild(row);
 
 	outputProgress.textContent = "Done!";
 }
