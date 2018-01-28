@@ -3,6 +3,7 @@
 <title>Voto y c&aacute;lculo de VUT</title>
 <script type="text/javascript" src="VUT.js"></script>
 <script type="text/javascript" src="VUTHelper.js"></script>
+<link rel="stylesheet" href="VUT.css" type="text/css" media="screen" />
 </head>
 <body>
 	<h1>Voto y c&aacute;lculo de VUT</h1>
@@ -21,6 +22,11 @@
 	<br><br><br>
 	<div id="votes">
 	</div>
+	<div id="lastVote">
+		<p id="lastVoteHeader"></p>
+		<br>
+		<table id="lastVoteTable"></table>
+	</div>
 	<br><br><br>
 	<div id="vut">
 		<p id="progress"></p>
@@ -30,6 +36,8 @@
 <script>
 (function() {
    // the DOM will be available here
+   var div = document.getElementById("lastVote");
+   div.style.visibility = "hidden";
 	onLoad();
 })();
 </script>

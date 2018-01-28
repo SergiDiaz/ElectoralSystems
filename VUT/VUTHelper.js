@@ -2,6 +2,8 @@ var idCounter = 0;
 var selectToVote;
 var btnToVote;
 var curVoterIndex = 0;
+var whiteAndNullVotesIndexes = [];
+
 
 function addCandidate() {
 	var textInput = document.getElementById("inputCandidate");
@@ -73,6 +75,16 @@ function closeCandidates() {
 	results.totalVotes = 0;
 	results.whites = 0;
 	results.nulls = 0;
+
+	var lastVoteHeader = document.getElementById("lastVoteHeader");
+	lastVoteHeader.textContent = "\xDAltima Papeleta";
+	div = document.getElementById("lastVote");
+	child = document.createElement("button");
+	child.type = "button";
+	child.textContent = "Deshacer";
+	child.addEventListener("click", undo);
+	div.appendChild(child);
+   	div.style.visibility = "visible";
 };
 
 function fillSelectToVote() {
@@ -109,10 +121,20 @@ function voteCandidate() {
 	if(indexCandidate == -1) {
 		//White vote
 		results.whites++;
+		var obj = {};
+		obj.kind = "white";
+		obj.index = curVoterIndex;
+		whiteAndNullVotesIndexes.push(obj);
+		fillLastVote();
 	}
 	else if(indexCandidate == -2) {
 		//Null vote
 		results.nulls++;
+		var obj = {};
+		obj.kind = "null";
+		obj.index = curVoterIndex;
+		whiteAndNullVotesIndexes.push(obj);
+		fillLastVote();
 	}
 	else {
 		selectToVote.removeChild(option);
@@ -123,7 +145,7 @@ function voteCandidate() {
 		}
 
 		var lastOption = selectToVote.options[selectToVote.length-1];
-		while(lastOption.value < 0) {
+		while(lastOption && lastOption.value < 0) {
 			selectToVote.removeChild(lastOption);
 			lastOption = selectToVote.options[selectToVote.length-1];
 		}
@@ -147,15 +169,76 @@ function voteCandidate() {
 	}
 };
 
-function nextVoter() {
-	fillSelectToVote();
-	curVoterIndex++;
-	btnToVote.textContent = "Votar en la posici\xF3n 1";
-	var table = document.getElementById("votesTable");
+function fillLastVote() {
+	var lastVoteHeader = document.getElementById("lastVoteHeader");
+	var table = document.getElementById("lastVoteTable");
 	while(table.hasChildNodes()) {
 		table.removeChild(table.childNodes[0]);
 	}
+	if(curVoterIndex > 0) {
+		if(whiteAndNullVotesIndexes.length > 0 && whiteAndNullVotesIndexes[whiteAndNullVotesIndexes.length-1].index === curVoterIndex) {
+			//White or null
+			lastVoteHeader.textContent = "\xDAltima Papeleta";
+			var row = document.createElement("tr");
+			var column = document.createElement("td");
+			var txt = document.createElement("p");
+			if(whiteAndNullVotesIndexes[whiteAndNullVotesIndexes.length-1].kind === "white") {
+				txt.textContent = "Voto en blanco";
+			} else {
+				txt.textContent = "Voto nulo";
+			}
+			column.appendChild(txt);
+			row.appendChild(column);
+			table.appendChild(row);
+		} else {
+			lastVoteHeader.textContent = "\xDAltima Papeleta (" + curVoterIndex + ")";
+			for(var i=0; i < results.voters[curVoterIndex-1].votes.length; ++i) {
+				var row = document.createElement("tr");
+				var column = document.createElement("td");
+				var txt = document.createElement("p");
+				txt.textContent = "" + (i+1) + " - " + results.voters[curVoterIndex-1].votes[i].text;
+				column.appendChild(txt);
+				row.appendChild(column);
+				table.appendChild(row);
+			}
+		}
+	} else {
+		lastVoteHeader.textContent = "\xDAltima Papeleta";
+	}
+}
+
+function nextVoter() {
+	
+	fillSelectToVote();
+	curVoterIndex++;
+	btnToVote.textContent = "Votar en la posici\xF3n 1";
+	table = document.getElementById("votesTable");
+	while(table.hasChildNodes()) {
+		table.removeChild(table.childNodes[0]);
+	}
+
+	fillLastVote();
 };
+
+function undo() {
+	if(curVoterIndex > 0 || whiteAndNullVotesIndexes.length > 0) {
+		if(typeof results.voters[curVoterIndex] !== "undefined") {
+			//If there's a half done voting, take it out too
+			results.voters.pop();	
+			results.totalVotes--;
+		}
+		if(whiteAndNullVotesIndexes.length > 0 && whiteAndNullVotesIndexes[whiteAndNullVotesIndexes.length-1].index === curVoterIndex) {
+			//White or null
+			whiteAndNullVotesIndexes.pop();
+		} else {
+			results.voters.pop();
+			curVoterIndex--;
+			results.totalVotes--;
+		}
+
+		fillLastVote();
+	}
+}
 
 function endVotesAndCount() {
 	var div = document.getElementById("votes");
