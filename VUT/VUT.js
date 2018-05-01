@@ -75,9 +75,51 @@ function calculate() {
 		row.appendChild(column);
 		resultsTable.appendChild(row);
 
+		reportVotes();
+
 		outputProgress.textContent = "Done!";
 	}
 };
+
+function reportVotes() {
+	var row = document.createElement("tr");
+	var column = document.createElement("td");
+	var txt = document.createElement("p");
+	txt.textContent = " ";
+	column.appendChild(txt);
+	row.appendChild(column);
+	resultsTable.appendChild(row);
+	row = document.createElement("tr");
+	column = document.createElement("td");
+	txt = document.createElement("p");
+	txt.textContent = "Votos emitidos:";
+	column.appendChild(txt);
+	row.appendChild(column);
+	resultsTable.appendChild(row);
+
+	for(var i = 0; i < results.voters.length; ++i) {
+		var voter = results.voters[i];
+		row = document.createElement("tr");
+		column = document.createElement("td");
+		txt = document.createElement("p");
+		txt.textContent = "Papeleta " + (i+1) + ": ";
+		column.appendChild(txt);
+		row.appendChild(column);
+		for(var j = 0; j < voter.votes.length; ++j) {
+			for(var k = 0; k < candidates.length; ++k) {
+				if(voter.votes[j].id == candidates[k].id) {
+					column = document.createElement("td");
+					txt = document.createElement("p");
+					txt.textContent = "" + (j+1) + ". " + candidates[k].text;
+					column.appendChild(txt);
+					row.appendChild(column);
+					break;
+				}
+			}
+		}
+		resultsTable.appendChild(row);
+	}
+}
 
 function electCandidate(candidate) {
 	numCandidatesElected++;
@@ -171,22 +213,4 @@ function electNonEliminatedCandidates() {
 			electCandidate(candidate);
 		}
 	}
-
-	var row = document.createElement("tr");
-	var column = document.createElement("td");
-	var txt = document.createElement("p");
-	txt.textContent = "Votos en blanco: " + results.whites;
-	column.appendChild(txt);
-	row.appendChild(column);
-	resultsTable.appendChild(row);
-
-	row = document.createElement("tr");
-	column = document.createElement("td");
-	txt = document.createElement("p");
-	txt.textContent = "Votos nulos: " + results.nulls;
-	column.appendChild(txt);
-	row.appendChild(column);
-	resultsTable.appendChild(row);
-
-	outputProgress.textContent = "Done!";
 }
