@@ -32,7 +32,7 @@ function addCandidate() {
 
 function closeCandidates() {
 	var textInput = document.getElementById("inputNumElected");
-	candidatesToChose = textInput.value;
+	candidatesToChoose = Number(textInput.value);
 	
 	var div = document.getElementById("candidatures");
 	var child = document.getElementById("inputCandidate");
