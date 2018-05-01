@@ -75,6 +75,14 @@ function calculate() {
 		row.appendChild(column);
 		resultsTable.appendChild(row);
 
+		row = document.createElement("tr");
+		column = document.createElement("td");
+		txt = document.createElement("p");
+		txt.textContent = "Cuota para entrar: " + droopQuota;
+		column.appendChild(txt);
+		row.appendChild(column);
+		resultsTable.appendChild(row);
+
 		reportVotes();
 
 		outputProgress.textContent = "Done!";
