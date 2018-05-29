@@ -11,9 +11,15 @@
 		Número de opciones ganadoras:
 		<input type="number" name="elected" id="inputNumElected" min="1">
 	</div>
+	<br>
+	<label id="labelGender"><input type="checkbox" name="gender" id="gender" onclick="changeGender()"> Cremallera de género</label>
 	<br><br><br>
 	<div id="candidatures">
 		<input type="text" name="candidate" id="inputCandidate">
+		<select id="selectGender" style="display:none;">
+			<option value="male"> Hombre</option>
+			<option value="female"> Mujer</option>
+		</select>
 		<button type="button" id="btnAdd" onclick="addCandidate()">A&ntilde;adir Opción</button>
 		<button type="button" id="btnClose" onclick="closeCandidates()">Cerrar Opciones</button>
 		<br>

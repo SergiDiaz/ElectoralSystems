@@ -5,7 +5,21 @@ var curVoterIndex = 0;
 var whiteAndNullVotesIndexes = [];
 
 
+function changeGender() {
+	var checkboxInput = document.getElementById("gender");
+	gender = checkboxInput.checked;
+	var selectGender = document.getElementById("selectGender");
+	if(gender) {
+		selectGender.style.display = "inline-block";
+	} else {
+		selectGender.style.display = "none";
+	}
+}
+
 function addCandidate() {
+	var labelGender = document.getElementById("labelGender");
+	labelGender.style.visibility = "hidden";
+
 	var textInput = document.getElementById("inputCandidate");
 	var candidate = {};
 	candidate.text = textInput.value;
@@ -14,6 +28,13 @@ function addCandidate() {
 	candidate.category = "";
 	candidate.elected = false;
 	candidate.eliminated = false;
+	if(gender) {
+		var selectGender = document.getElementById("selectGender");
+		candidate.female = (selectGender.value === "female");
+		if(candidate.female) {
+			totalWomen++;
+		}
+	}
 
 	candidates.push(candidate);
 	idCounter++;

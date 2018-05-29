@@ -11,6 +11,12 @@ var numCandidatesElected;
 var numCandidatesEliminated;
 var firstDistributionDone = false;
 var candidateElectedLastPass;
+var gender = false;
+var numWomenChoosen;
+var minWomenToChoose;
+var totalWomen = 0;
+var womenLeft;
+var menEliminated;
 
 
 function onLoad() {
@@ -27,6 +33,12 @@ function prepareVUT() {
 	numCandidatesEliminated = 0;
 	indexCandidate = 0;
 	candidateElectedLastPass = false;
+	if(gender) {
+		numWomenChoosen = 0;
+		womenLeft = totalWomen;
+		menEliminated = false;
+		minWomenToChoose = Math.ceil(candidatesToChoose / 2);
+	}
 	outputProgress.textContent = "Calculating VUT...";
 	setTimeout(calculate, 1);
 };
@@ -41,6 +53,15 @@ function calculate() {
 			}
 		}
 	}
+
+	if(gender) {
+		if(!menEliminated && (womenLeft > 0) &&
+			(numWomenChoosen < minWomenToChoose) && (womenLeft >= candidatesToChoose - numCandidatesElected) && (candidatesToChoose - numCandidatesElected <= minWomenToChoose - numWomenChoosen)) {
+			setTimeout(eliminateMen, 1);
+			return;
+		}
+	}
+
 	var candidate = candidates[indexCandidate];
 	if(!candidate.elected && candidate.votes >= droopQuota) {
 		electCandidate(candidate);
@@ -134,12 +155,22 @@ function electCandidate(candidate) {
 	var row = document.createElement("tr");
 	var column = document.createElement("td");
 	var txt = document.createElement("p");
-	txt.textContent = "" + numCandidatesElected + " - " + candidate.text;
+	if(gender) {
+		txt.textContent = "" + numCandidatesElected + " - " + candidate.text + " (" + (candidate.female ? "Mujer)" : "Hombre)");
+	} else {
+		txt.textContent = "" + numCandidatesElected + " - " + candidate.text;
+	}
 	column.appendChild(txt);
 	row.appendChild(column);
 	resultsTable.appendChild(row);
 	candidate.elected = true;
 	candidateElectedLastPass = true;
+	if(gender) {
+		if(candidate.female) {
+			numWomenChoosen++;
+			womenLeft--;
+		}
+	}
 }
 
 function transferSurplus() {
@@ -191,7 +222,7 @@ function eliminateCandidate() {
 	for(var i = 0; i < candidates.length; ++i) {
 		var candidate = candidates[i];
 		if(!candidate.elected && !candidate.eliminated) {
-			if(candidate.votes < numVotes) {
+			if(candidate.votes <= numVotes) {
 				numVotes = candidate.votes;
 				candidateToEliminate = candidate;
 				found = true;
@@ -200,18 +231,27 @@ function eliminateCandidate() {
 	}
 
 	if(found) {
-		candidateToEliminate.eliminated = true;
-		candidateToEliminate.votes = 0;
-		numCandidatesEliminated++;
-		if(numCandidatesEliminated >= candidates.length - candidatesToChoose) {
-			electNonEliminatedCandidates();
-		}
-		else {
-			transferVotesFromCandidate(candidateToEliminate, 1);
-		}
+		eliminateCandidateInternal(candidateToEliminate);
 	}
 	indexCandidate = 0;
 	setTimeout(calculate, 1);
+}
+
+function eliminateCandidateInternal(candidate) {
+	candidate.eliminated = true;
+	candidate.votes = 0;
+	numCandidatesEliminated++;
+	if(gender) {
+		if(candidate.female) {
+			womenLeft--;
+		}
+	}
+	if(numCandidatesEliminated >= candidates.length - candidatesToChoose) {
+		electNonEliminatedCandidates();
+	}
+	else {
+		transferVotesFromCandidate(candidate, 1);
+	}
 }
 
 function electNonEliminatedCandidates() {
@@ -220,5 +260,23 @@ function electNonEliminatedCandidates() {
 		if(!candidate.elected && !candidate.eliminated) {
 			electCandidate(candidate);
 		}
+	}
+}
+
+function eliminateMen() {
+	if(gender) {
+		for(var i = 0; i < candidates.length; ++i) {
+			var candidate = candidates[i];
+			if(!candidate.elected && !candidate.eliminated) {
+				if(!candidate.female) {
+					eliminateCandidateInternal(candidate);
+				}
+			}
+		}
+
+		menEliminated = true;
+		setTimeout(calculate, 1);
+	} else {
+		console.log("Called eliminateMen when gender isn't active!");
 	}
 }
