@@ -264,7 +264,10 @@ function undo() {
 function endVotesAndCount() {
 	var div = document.getElementById("votes");
 	div.parentNode.removeChild(div);
+	div = document.getElementById("lastVote");
+	div.parentNode.removeChild(div);
 	outputProgress = document.getElementById("progress");
 	resultsTable = document.getElementById("results");
+	roundsTable = document.getElementById("rounds");
 	prepareVUT();
 };

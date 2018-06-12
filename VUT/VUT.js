@@ -1,6 +1,7 @@
 var resultsTable;
 var outputProgress;
 var candidatesToChoose;
+var roundsTable;
 
 var candidates = [];
 var results = {};
@@ -17,6 +18,7 @@ var minWomenToChoose;
 var totalWomen = 0;
 var womenLeft;
 var menEliminated;
+var curRound = 1;
 
 
 function onLoad() {
@@ -39,6 +41,13 @@ function prepareVUT() {
 		menEliminated = false;
 		minWomenToChoose = Math.ceil(candidatesToChoose / 2);
 	}
+	var row = document.createElement("tr");
+	var column = document.createElement("td");
+	var txt = document.createElement("p");
+	txt.textContent = "Rondas:";
+	column.appendChild(txt);
+	row.appendChild(column);
+	roundsTable.appendChild(row);
 	outputProgress.textContent = "Calculating VUT...";
 	setTimeout(calculate, 1);
 };
@@ -163,6 +172,13 @@ function electCandidate(candidate) {
 	column.appendChild(txt);
 	row.appendChild(column);
 	resultsTable.appendChild(row);
+	row = document.createElement("tr");
+	column = document.createElement("td");
+	txt = document.createElement("p");
+	txt.textContent = "Ronda " + curRound + ": escogida opción/candidato " + candidate.text;
+	column.appendChild(txt);
+	row.appendChild(column);
+	roundsTable.appendChild(row);
 	candidate.elected = true;
 	candidateElectedLastPass = true;
 	if(gender) {
@@ -234,6 +250,7 @@ function eliminateCandidate() {
 		eliminateCandidateInternal(candidateToEliminate);
 	}
 	indexCandidate = 0;
+	curRound++;
 	setTimeout(calculate, 1);
 }
 
@@ -246,6 +263,15 @@ function eliminateCandidateInternal(candidate) {
 			womenLeft--;
 		}
 	}
+
+	var row = document.createElement("tr");
+	var column = document.createElement("td");
+	var txt = document.createElement("p");
+	txt.textContent = "Ronda " + curRound + ": eliminada opción/candidato " + candidate.text;
+	column.appendChild(txt);
+	row.appendChild(column);
+	roundsTable.appendChild(row);
+
 	if(numCandidatesEliminated >= candidates.length - candidatesToChoose) {
 		electNonEliminatedCandidates();
 	}
