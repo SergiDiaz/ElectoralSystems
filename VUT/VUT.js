@@ -199,7 +199,10 @@ function transferSurplus() {
 		}
 	}
 
-	setTimeout(eliminateCandidate, 1);
+	indexCandidate = 0;
+	curRound++;
+	candidateElectedLastPass = false;
+	setTimeout(calculate, 1);
 };
 
 function transferVotesFromCandidate(candidate, voteValue) {
@@ -251,6 +254,7 @@ function eliminateCandidate() {
 	}
 	indexCandidate = 0;
 	curRound++;
+	candidateElectedLastPass = false;
 	setTimeout(calculate, 1);
 }
 
