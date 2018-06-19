@@ -242,9 +242,11 @@ function eliminateCandidate() {
 		var candidate = candidates[i];
 		if(!candidate.elected && !candidate.eliminated) {
 			if(candidate.votes <= numVotes) {
-				numVotes = candidate.votes;
-				candidateToEliminate = candidate;
-				found = true;
+				if(!gender || !candidate.female || womenLeft === 0 || womenLeft + numWomenChoosen > minWomenToChoose) {
+					numVotes = candidate.votes;
+					candidateToEliminate = candidate;
+					found = true;
+				}
 			}
 		}
 	}
