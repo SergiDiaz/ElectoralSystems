@@ -175,7 +175,7 @@ function electCandidate(candidate) {
 	row = document.createElement("tr");
 	column = document.createElement("td");
 	txt = document.createElement("p");
-	txt.textContent = "Ronda " + curRound + ": escogida opción/candidato " + candidate.text;
+	txt.textContent = "Ronda " + curRound + ": escogida opci\u00F3n/candidato " + candidate.text;
 	column.appendChild(txt);
 	row.appendChild(column);
 	roundsTable.appendChild(row);
@@ -271,7 +271,7 @@ function eliminateCandidateInternal(candidate) {
 	var row = document.createElement("tr");
 	var column = document.createElement("td");
 	var txt = document.createElement("p");
-	txt.textContent = "Ronda " + curRound + ": eliminada opción/candidato " + candidate.text;
+	txt.textContent = "Ronda " + curRound + ": eliminada opci\u00F3n/candidato " + candidate.text;
 	column.appendChild(txt);
 	row.appendChild(column);
 	roundsTable.appendChild(row);
